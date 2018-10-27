@@ -1,0 +1,44 @@
+ul.product-types{
+    list-style-type: none;
+}
+div.blog h3{
+    margin-top: 1em;
+    padding-left: 10px;
+    color: #714b73;
+;
+}
+div.blog p{
+    margin-left: 0.5em;
+    padding-left: 1px;
+    color: #54675a;
+}
+div.blog p.blog-info{
+    margin: 0;
+}
+h3.blog_header{
+    margin-left: 29em;
+    color: #9ba97273;
+}
+div.blog_category h3{
+    font-size: 15px;
+    margin: 1px;
+    color: #74357b;
+    padding-bottom: 0.2em;
+    padding-left: 0.1em;
+}
+div.detail p{
+    font-size: 5px;
+    text-align: right;
+    margin-right: 150px;
+    color: #694f68;
+
+}
+ul.blog-info-description{
+    list-style-type: none;
+    margin-bottom: 2em;
+}
+ul.blog-info-description1 p{
+    padding-left: 0.5em;
+    margin-bottom: 1em
+;
+}

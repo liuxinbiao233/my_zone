@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block nav_blog_active %}active{% endblock %}
+
+{% load staticfiles %}
+{% block nav_heard %}
+    <link rel="stylesheet" href="{% static 'blog.css' %}">
+{% endblock %}
+{% block title %}
+    <div class="title">
+        <h3 class="blog_header">刘新彪的剁手史</h3>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{% block blog_list_title %}购买列表(一共剁手{{ products|length  }}次){% endblock %}</div>
+                    <div class="panel-body">
+                        {% for product in products %}
+                            <div class="blog">
+                                <a href="{% url 'product_detail' product.pk %}">
+                                    <h3>{{ product.Name }}</h3>
+                                </a>
+                                <p class="blog-info">
+                                    <span class="glyphicon glyphicon-star"></span> <a href="{% url 'Category' product.Category.pk %}">{{ product.Category }}</a>
+                                    <p>介绍：{{ product.Describe|truncatechars:30}}</p>
+                                    <p>在这次剁手花了:{{ product.vlaue }}元</p>
+                                    <p>在：{{ product.create_time|date:"Y-m-d G:n:s" }}记录</p>
+                                    <hr>
+
+                            </div>
+                            {% empty %}
+                            <div class="blog">
+                                <h3>--可能是我我在迁移数据库是出错了，什么都没有显示</h3>
+                            </div>
+                        {% endfor %}
+                        <p>一共剁手了{{ products|length }}个商品</p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">购买分类</div>
+                    <div class="panel-body">
+                        <ul class="product-types" style="list-style: none;">
+                            {% for category in products_category %}
+                                <div class="blog_category">
+                                    <li>
+                                        <a href="{% url 'Category' category.pk %}"><h3>{{ category.Name }}</h3></a>
+                                    </li>
+                                </div>
+                            <div class="blog_category">
+                                {% empty %}
+                                    <li>暂无分类</li>
+                            </div>
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+

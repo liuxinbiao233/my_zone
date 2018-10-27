@@ -1,0 +1,8 @@
+h3.home-content{
+    font-size: 200%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: #4f0a6b;
+    transform:translate(-50%,-50%);
+}

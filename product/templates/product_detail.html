@@ -1,0 +1,33 @@
+{% extends 'product_list.html' %}
+{% block title %}
+    <div class="detail">
+        <p>真不知道自己到处是怎么想的～.～</p>
+    </div>
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <h3>{{ product.Name }}</h3>
+                <ul class="blog-info-description1">
+                    <p>分类：
+                    <a href="{% url 'Category' product.Category.pk %}" >
+                        {{ product.Category }}
+                    </a>
+                    </p>
+                    <p style="text-indent: 2em">{{ product.Describe }}</p>
+                    <img src="{{ product.Picture.url }}" alt="{{ product.Name }}">
+                    <img src="{{ product.Picture1.url }}" alt="{{ product.Name }}">
+                    <p>在这次剁手花了:{{ product.vlaue }}元</p>
+                    <p>在：{{ product.create_time|date:"Y-m-d G:n:s" }}记录的</p>
+
+                </ul>
+                </div>
+        </div>
+    </div>
+
+
+{% endblock %}
