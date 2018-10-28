@@ -19,7 +19,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{% block blog_list_title %}购买列表(一共剁手{{ products|length  }}次){% endblock %}</div>
                     <div class="panel-body">
-                        {% for product in products %}
+                        {% for product in page_of_products.object_list %}
                             <div class="blog">
                                 <a href="{% url 'product_detail' product.pk %}">
                                     <h3>{{ product.Name }}</h3>
@@ -37,11 +37,49 @@
                                 <h3>--可能是我我在迁移数据库是出错了，什么都没有显示</h3>
                             </div>
                         {% endfor %}
-                        <p>一共剁手了{{ products|length }}个商品</p>
 
                     </div>
                 </div>
+                <div class="paginator">
+                    <ul class="pagination">
+                        <li>
+                            {#上一页 #}
+                            {% if page_of_products.has_previous %}
+                                <a href="{{ page_of_products.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            {% else %}
+                                <span aria-hidden="true">&laquo;</span>
+                            {% endif %}
+                        </li>
+                            {# 全部页码 #}
+                            {% for page_num in page_range %}
+                                {% if page_num == page_of_products.number  %}
+                                     <li class="active"><a href="?page={{ page_num }}"> {{ page_num }}</a></li>
+                                {% else %}
+                                    {% if page_num == '...' %}
+                                        <li> {{ page_num }}</li>
+                                    {% else %}
+                                        <li><a href="?page={{ page_num }}"> {{ page_num }}</a></li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
 
+                        <li>
+                            {% if page_of_products.has_next %}
+                                <a href="{{ page_of_products.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            {% else %}
+                                 <span aria-hidden="true">&raquo;</span>
+                            {% endif %}
+
+                        </li>
+                    </ul>
+                    <p>
+                        当前第{{ page_of_products.number }}页，共{{ page_of_products.paginator.num_pages }}页
+                    </p>
+                </div>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-default">

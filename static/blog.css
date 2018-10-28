@@ -42,3 +42,6 @@ ul.blog-info-description1 p{
     margin-bottom: 1em
 ;
 }
+div.paginator {
+    text-align: center;
+}

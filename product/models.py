@@ -30,7 +30,7 @@ class Product_List(models.Model):
     class Meta:
         db_table = 'Product_List'  # 数据库的表名
         verbose_name_plural = "产品列表"
-        ordering=('-create_time',)
+        ordering=['-create_time',]
 
     def __str__(self):
         return self.Name
