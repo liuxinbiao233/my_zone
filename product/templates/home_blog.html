@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block nav_heard %}
+     <link rel="stylesheet" href="{% static 'home.css' %}">
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+{% endblock %}
+
+{% block article_active %}
+    active
+{% endblock %}
+
+{% block content %}
+     <div class="hot-data">
+             <!--今天的热门博客-->
+            <h3>今天热门点击</h3>
+                <ul>
+                    {% for get_today in get_today_hot_date %}
+                        <li style="color:#bd8abc"><a style="color: #6b4c73" href="{% url 'blog_detail' get_today.id %}">{{ get_today.title }}</a>({{ get_today.read_num_sum }})</li>
+                    {% empty %}
+                        <li>今天暂时还没有热门点击</li>
+                    {% endfor %}
+                </ul>
+        </div>
+    <h3 class="home-content">自己在学习的乱七八糟的东西</h3>
+    <div class="home_to_list"><a style="color: #a197ab;" href="{% url 'blog_list' %}">点击可以到达列表呦</a></div>
+    <div id="container"></div>
+
+            <script>
+              // 图表配置
+                var options = {
+                    chart: { type: 'line' },
+                    title: { text: null },
+                    xAxis: {
+                        categories: {{ dates|safe }},   // x 轴分类
+                        tickmarkPlacement: 'on',
+                        title: { text: '前7日阅读量变化'},
+                    },
+                    yAxis: {
+                        title: { text: null },
+                        labels:{ enabled: false },
+                        gridLineDashStyle: 'Dash',
+                    },
+                    series: [{                              // 数据列
+                        name: '阅读量',                     // 数据列名
+                        data: {{ read_nums_sevent }},  // 数据
+                        color:'#b13522'
+                    }],
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    legend: { enabled: false },
+                    credits: { enabled: false },
+                };
+                // 图表初始化函数
+                var chart = Highcharts.chart('container', options);
+            </script>
+    <div class="hot_7_days">
+        <h3>最近七天热门点击</h3>
+        <ul>
+            {% for get_7_data in get_7_days_hot_blogs %}
+                <li style="color:#bd8abc"><a style="color: #6b4c73" href="{% url 'blog_detail' get_7_data.id %}">{{ get_7_data.title }}</a>({{ get_7_data.read_num_sum }})</li>
+            {% empty %}
+                <li>最近七天暂时还没有热门点击</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="container1"></div>
+
+            <script>
+                var options1 = {
+                    chart: {
+                        type: 'bar'                          //指定图表的类型，默认是折线图（line）
+                    },
+                    title: {
+                        text: '昨日阅读排行'                 // 标题
+                    },
+                    xAxis: [{
+                        categories:  [{% for get_yestertoday in get_yesterday_hot_data %}'{{ get_yestertoday.title|safe }}',{% endfor %}], // x 轴分类
+                    }],
+                    yAxis: {
+                        title: {
+                            text: ''                // y 轴标题
+                        }
+                    },
+                    credits:{
+                        enabled: false 						// 禁用版权信息
+                    },
+                    series: [{                              // 数据列
+                       name: '次数',                     // 数据列名
+                        data:[{% for get_yestertoday in get_yesterday_hot_data %}{{ get_yestertoday.read_num_sum|safe }},{% endfor %}],
+                        color: '#ccc'
+                    }],
+                };
+                // 图表初始化函数
+                var chart1 = Highcharts.chart('container1', options1);
+            </script>
+
+    <div class="hot_yesterday">
+        <h3>昨天热门点击</h3>
+        <ul>
+            {% for get_yestertoday in get_yesterday_hot_data %}
+                <li style="color:#bd8abc"><a style="color: #6b4c73" href="{% url 'blog_detail' get_yestertoday.id %}">{{ get_yestertoday.title }}</a>({{ get_yestertoday.read_num_sum }})</li>
+            {% empty %}
+                <li>昨天暂时还没有热门点击</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+
+
+
+
+{% endblock %}

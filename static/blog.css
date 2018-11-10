@@ -12,12 +12,23 @@ div.blog p{
     padding-left: 1px;
     color: #54675a;
 }
+div.blog_artcle p{
+    margin-left: 0.7em;
+    padding-left: 1px;
+    color: #180f1d;
+}
+div.blog_artcle h3{
+    margin-top: 1em;
+    padding-left: 5px;
+    color: #180f1d;
+;
+}
 div.blog p.blog-info{
     margin: 0;
 }
 h3.blog_header{
     margin-left: 29em;
-    color: #9ba97273;
+    color:#94484873;
 }
 div.blog_category h3{
     font-size: 15px;
@@ -44,4 +55,14 @@ ul.blog-info-description1 p{
 }
 div.paginator {
     text-align: center;
+}
+div.blog_releate.p{
+    margin-top: 1em;
+}
+div.blog_date h3{
+    font-size: 15px;
+    margin: 1px;
+    color: #74357b;
+    padding-bottom: 0.2em;
+    padding-left: 0.1em;
 }

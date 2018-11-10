@@ -1,10 +1,13 @@
 {% extends 'product_list.html' %}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'blog.css' %}">
+
 {% block title %}
     <div class="detail">
         <p>真不知道自己到处是怎么想的～.～</p>
     </div>
-
 {% endblock %}
+
 
 
 {% block content %}
@@ -14,18 +17,31 @@
                 <h3>{{ product.Name }}</h3>
                 <ul class="blog-info-description1">
                     <p>分类：
-                    <a href="{% url 'Category' product.Category.pk %}" >
-                        {{ product.Category }}
-                    </a>
+                        <a href="{% url 'Category' product.Category.pk %}" >
+                            {{ product.Category }}
+                        </a>
                     </p>
                     <p style="text-indent: 2em">{{ product.Describe }}</p>
                     <img src="{{ product.Picture.url }}" alt="{{ product.Name }}">
                     <img src="{{ product.Picture1.url }}" alt="{{ product.Name }}">
-                    <p>在这次剁手花了:{{ product.vlaue }}元</p>
-                    <p>在：{{ product.create_time|date:"Y-m-d G:n:s" }}记录的</p>
-
-                </ul>
+                 </ul>
+                <div class="blog_releate">
+                    <p>上一篇：
+                        {% if previous_blog %}
+                            <a href="{% url 'product_detail' previous_blog.pk%}">{{ previous_blog.Name }}</a>
+                        {% else %}
+                            没有了
+                        {% endif %}
+                    </p>
+                    <p>下一篇:
+                        {% if next_blog %}
+                            <a href="{% url 'product_detail' next_blog.pk%}">{{ next_blog.Name }}</a>
+                        {% else %}
+                            没有了
+                        {% endif %}
+                    </p>
                 </div>
+            </div>
         </div>
     </div>
 

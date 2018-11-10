@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'product',
+    'blog',
+    'ckeditor',
+    'ckeditor_uploader',
+    'read_statistics',
 
 ]
 
@@ -129,8 +133,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'static'),
 ]
-
+#media
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-
 MEDIA_URL='/media/'
+#配置ckeditor
+CKEDITOR_UPLOAD_PATH='upload/'
+
+#创建缓存
+CACHE={
+    'default':{
+        'BACKEND':'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION':'my_cache_table',
+    }
+}
 

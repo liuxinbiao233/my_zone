@@ -1,8 +1,41 @@
 h3.home-content{
     font-size: 200%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.1em;
     color: #4f0a6b;
-    transform:translate(-50%,-50%);
+}
+
+div#container{
+    margin: 0 auto;
+    height: 20em;
+    width: 40em;
+
+}
+div.home_to_list {
+    margin-left: 75em;
+    font-size: 2px;
+}
+
+div.hot_7_days{
+    text-align: center;
+    margin-top: 1em;
+}
+div.hot-data{
+    text-align: left;
+}
+div.hot_yesterday{
+    text-align: right;
+}
+
+div#container1{
+
+    height: 20em;
+    width: 40em;
+}
+div#container2{
+    margin-top: 5em;
+    margin-left:6em;
+    height: 20em;
+    width: 60em;
 }

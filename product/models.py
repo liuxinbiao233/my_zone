@@ -15,6 +15,8 @@ class Category_of_goods(models.Model):
         return self.Name
 
 
+
+
 class Product_List(models.Model):
     Name = models.CharField(max_length=200, unique=True)
     Describe = models.TextField(blank=True)

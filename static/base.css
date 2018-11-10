@@ -9,3 +9,6 @@ button.btn.btn-default{
     color: #5912b7;
 
 }
+ul{
+    list-style-type: none!important;
+}

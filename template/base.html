@@ -7,12 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'base.css' %}">
-     <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     <script type="text/javascript" src="{% static 'jquery-1.12.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
-
+    {% block nav_heard  %}{% endblock %}
 </head>
-
 
 
 <body>
@@ -22,7 +21,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <button class="navbar-toggle collapsed"></button>
-                <a style="color:#4f0a6b" class="navbar-brand" href="{% url 'home' %}">个人博客网站</a>
+                <a style="color:#4f0a6b" class="navbar-brand" href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>--->刘新彪</a>
                 <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -38,32 +37,34 @@
                     <li class="{% block nav_blog_active %}{% endblock %}">
                         <a style="color:#5912b7" href="{% url 'product_list' %}">我的购物史</a>
                     </li>
-                    <li><a style="color:#5912b7" href="#">博客</a></li>
+                    <li class="{% block article_active %}{% endblock %}">
+                        <a style="color:#5912b7" href="{% url 'blog_name' %}">博客</a>
+                    </li>
                     <li><a style="color:#5912b7" href="#">身边的趣事</a></li>
                     <li class="dropdown">
                         <a style="color:#5912b7" href="{% url 'product_list' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">购物分类 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a style="color:#5912b7" href="#">电脑</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'Category_computer' %}">电脑</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">手机</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'Category_mobile' %}">手机</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">鞋子</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'Category_shoes' %}">鞋子</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">个人造型</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'Category_Personal_modeling' %}">个人造型</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">耳机</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'Category_Headset' %}">耳机</a></li>
                             </ul>
                     </li>
                     <li class="dropdown">
                         <a style="color:#5912b7" href="{% url 'product_list' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">博客分类 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a style="color:#5912b7" href="#">爬虫</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'blog_type_scrapy' %}">爬虫</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">django</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'blog_type_tools' %}">电脑所用的工具</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">opencv</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'blog_type_opencv' %}">opencv</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a style="color:#5912b7" href="#">hadhoop</a></li>
+                                <li><a style="color:#5912b7" href="{% url 'blog_type_hadhoop' %}">hadhoop</a></li>
                             </ul>
                     </li>
                 </ul>
@@ -75,22 +76,21 @@
                 </form>
                  <ul class="nav navbar-nav navbar-right">
                      <li class="dropdown">
-                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">用户 <span class="caret"></span></a>
+                         <a style="color:#4f0a6b" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>用户 <span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             <li><a href="#">个人中心</a></li>
+                             <li><a style="color:#4f0a6b" href="#">个人中心</a></li>
                              <li role="separator" class="divider"></li>
-                             <li><a href="#">退出</a></li>
+                             <li><a style="color:#4f0a6b" href="#">退出</a></li>
                          </ul>
                      </li>
                  </ul>
-            </div><!-- /.navbar-collapse -->
+            </div>
         </div>
     </nav>
      <titel>
-        {% block title %}{% endblock %}
+        {% block title %}{% endblock %}`
     </titel>
 
-    {% block nav_heard %}{% endblock %}
 
     {% block content %}{% endblock %}
 
