@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404,HttpResponse,render_to_response
+from django.shortcuts import get_object_or_404, HttpResponse, render_to_response, render
 from django.core.paginator import Paginator
 from product.models import Product_List,Category_of_goods
 from django.db.models import Count
@@ -52,20 +52,20 @@ def product_detail(request,product_pk):
     context['next_blog'] = Product_List.objects.filter(create_time__lt=product.create_time).first()
     context['product']=product
 
-    return render_to_response('product_detail.html',context)
+    return render(request,'product_detail.html',context)
 
 def Category(request,Category_pk):
     Category=get_object_or_404(Category_of_goods,pk=Category_pk)
     product_all_list = Product_List.objects.filter(Category=Category)
     context=get_comment(request,product_all_list)
     context['Category'] = Category
-    return render_to_response('product_category.html', context)
+    return render(request,'product_category.html', context)
 
 def product_date(request,year,month,day):
     product_all_list=Product_List.objects.filter(create_time__year=year,create_time__month=month,create_time__day=day)
     product_date_category = '%s年%s月%s日' % (year, month, day)
     context = get_comment(request,product_all_list)
     context['product_date_category']=product_date_category
-    return render_to_response('product_date.html',context)
+    return render(request,'product_date.html',context)
 
 

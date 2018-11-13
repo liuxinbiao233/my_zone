@@ -25,7 +25,7 @@ div.hot-data{
     text-align: left;
 }
 div.hot_yesterday{
-    text-align: right;
+    margin-left: 43em;
 }
 
 div#container1{

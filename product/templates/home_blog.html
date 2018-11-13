@@ -78,7 +78,7 @@
                         type: 'bar'                          //指定图表的类型，默认是折线图（line）
                     },
                     title: {
-                        text: '昨日阅读排行'                 // 标题
+                        text: '昨日阅读次数'                 // 标题
                     },
                     xAxis: [{
                         categories:  [{% for get_yestertoday in get_yesterday_hot_data %}'{{ get_yestertoday.title|safe }}',{% endfor %}], // x 轴分类

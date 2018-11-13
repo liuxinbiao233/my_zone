@@ -40,7 +40,8 @@
                     <li class="{% block article_active %}{% endblock %}">
                         <a style="color:#5912b7" href="{% url 'blog_name' %}">博客</a>
                     </li>
-                    <li><a style="color:#5912b7" href="#">身边的趣事</a></li>
+                    <li><li class="{% block interestings_active %}{% endblock %}">
+                        <a style="color:#5912b7" href="{% url 'insterering_list' %}">身边的趣事</a></li>
                     <li class="dropdown">
                         <a style="color:#5912b7" href="{% url 'product_list' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">购物分类 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -75,24 +76,183 @@
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
                  <ul class="nav navbar-nav navbar-right">
-                     <li class="dropdown">
-                         <a style="color:#4f0a6b" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>用户 <span class="caret"></span></a>
-                         <ul class="dropdown-menu">
-                             <li><a style="color:#4f0a6b" href="#">个人中心</a></li>
-                             <li role="separator" class="divider"></li>
-                             <li><a style="color:#4f0a6b" href="#">退出</a></li>
-                         </ul>
-                     </li>
-                 </ul>
+                    {% if not user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a>
+                        </li>
+                    {% else %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" >
+                                {% if user.has_nickname %}
+                                    {{ user.username }}({{ user.get_nickname }})
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'user_info' %}">个人资料</a></li>
+                                <li><a href="{% url 'change_password' %}">修改密码</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{% url 'logout' %}?from={{ request.get_full_path }}">退出</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                  </ul>
             </div>
         </div>
     </nav>
      <titel>
-        {% block title %}{% endblock %}`
+        {% block title %}{% endblock %}
     </titel>
 
 
     {% block content %}{% endblock %}
+    {% block script_extends %}
+
+        <script type="text/javascript">
+            String.prototype.format = function(){
+                var str = this;
+                for (var i = 0; i < arguments.length; i++) {
+                    var str = str.replace(new RegExp('\\{' + i + '\\}', 'g'), arguments[i])
+                };
+                return str;
+            }
+            function reply(reply_comment_id){
+                // 设置值
+                $('#reply_comment_id').val(reply_comment_id);
+                var html = $("#comment_" + reply_comment_id).html();
+                $('#reply_content').html(html);
+                $('#reply_content_container').show();
+
+                $('html').animate({scrollTop: $('#comment_form').offset().top - 60}, 300, function(){
+                    CKEDITOR.instances['id_text'].focus();
+                });
+            }
+            function numFormat(num){
+                return ('00' + num).substr(-2);
+            }
+            function timeFormat(timestamp){
+                var datetime = new Date(timestamp * 1000);
+                var year = datetime.getFullYear();
+                var month = numFormat(datetime.getMonth() + 1);
+                var day = numFormat(datetime.getDate());
+                var hour = numFormat(datetime.getHours());
+                var minute = numFormat(datetime.getMinutes());
+                var second = numFormat(datetime.getSeconds());
+                return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+            }
+            $("#comment_form").submit(function(){
+                // 判断是否为空
+                $("#comment_error").text('');
+                if(CKEDITOR.instances["id_text"].document.getBody().getText().trim()==''){
+                    $("#comment_error").text('评论内容不能为空');
+                    return false;
+                }
+
+                // 更新数据到textarea
+                CKEDITOR.instances['id_text'].updateElement();
+
+                // 异步提交
+                $.ajax({
+                    url: "{% url 'update_comment' %}",
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    cache: false,
+                    success: function(data){
+                        console.log(data);
+                        if(data['status']=="SUCCESS"){
+                            if($('#reply_comment_id').val()=='0'){
+                                // 插入评论
+                                var comment_html = '<div id="root_{0}" class="comment">' +
+                                    '<span>{1}</span>' +
+                                    '<span>({2})：</span>' +
+                                    '<div id="comment_{0}">{3}</div>' +
+                                    '<div class="like" onclick="likeChange(this, \'{4}\', {0})">' +
+                                        '<span class="glyphicon glyphicon-thumbs-up"></span> ' +
+                                        '<span class="liked-num">0</span>' +
+                                    '</div>' +
+                                    '<a href="javascript:reply({0});">回复</a>' +
+                                    '</div>';
+                                comment_html = comment_html.format(data['pk'], data['username'], timeFormat(data['comment_time']), data['text'], data['content_type']);
+                                $("#comment_list").prepend(comment_html);
+                            }else{
+                                // 插入回复
+                                var reply_html = '<div class="reply">' +
+                                            '<span>{1}</span>' +
+                                            '<span>({2})</span>' +
+                                            '<span>回复</span>' +
+                                            '<span>{3}：</span>' +
+                                            '<div id="comment_{0}">{4}</div>' +
+                                            '<div class="like" onclick="likeChange(this, \'{5}\', {0})">' +
+                                                '<span class="glyphicon glyphicon-thumbs-up\"></span> ' +
+                                                '<span class="liked-num">0</span>' +
+                                            '</div>' +
+                                            '<a href="javascript:reply({0});">回复</a>' +
+                                        '</div>';
+                                reply_html = reply_html.format(data['pk'], data['username'], timeFormat(data['comment_time']), data['reply_to'], data['text'], data['content_type']);
+                                $("#root_" + data['root_pk']).append(reply_html);
+                            }
+
+                            // 清空编辑框的内容
+                            CKEDITOR.instances['id_text'].setData('');
+                            $('#reply_content_container').hide();
+                            $('#reply_comment_id').val('0');
+                            $('#no_comment').remove();
+                            $("#comment_error").text('评论成功');
+                        }else{
+                            // 显示错误信息
+                            $("#comment_error").text(data['message']);
+                        }
+                    },
+                    error: function(xhr){
+                        console.log(xhr);
+                    }
+                });
+                return false;
+            });
+            function likeChange(obj, content_type, object_id){
+                var is_like = obj.getElementsByClassName('active').length == 0
+                $.ajax({
+                    url: "{% url 'like_change' %}",
+                    type: 'GET',
+                    data: {
+                        content_type: content_type,
+                        object_id: object_id,
+                        is_like: is_like
+                    },
+                    cache: false,
+                    success: function(data){
+                        console.log(data)
+                        if(data['status']=='SUCCESS'){
+                            // 更新点赞状态
+                            var element = $(obj.getElementsByClassName('glyphicon'));
+                            if(is_like){
+                                element.addClass('active');
+                            }else{
+                                element.removeClass('active');
+                            }
+                            // 更新点赞数量
+                            var liked_num = $(obj.getElementsByClassName('liked-num'));
+                            liked_num.text(data['liked_num']);
+                        }else{
+                            if(data['code']==400){
+                                $('#login_modal').modal('show');
+                            }else{
+                                alert(data['message']);
+                            }
+                        }
+                    },
+                    error: function(xhr){
+                        console.log(xhr)
+                    }
+                });
+            }
+        </script>
+    {% endblock %}
 
 
 </body>

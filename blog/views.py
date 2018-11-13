@@ -3,9 +3,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import Count, Sum
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import  get_object_or_404, render
 from django.utils import timezone
 
+from comment.forms import CommentForm
+from comment.models import Comment
 from .models import Blog, Blog_Type
 from read_statistics.utils import read_statistics_once_read, get_yesterday_days_date
 from read_statistics.utils import  get_seven_days_date
@@ -47,16 +49,19 @@ def blog_with_comment(request,blog_all_list):
 def blog_list(request):
     blog_all_list_=Blog.objects.all()
     context = blog_with_comment(request, blog_all_list_)
-    return render_to_response('blog_list.html',context)
+    return render(request,'blog_list.html',context)
 
 def blog_detail(request,blog_pk,):
     blog = get_object_or_404(Blog, pk=blog_pk)
     read_cookies_key=read_statistics_once_read(request,blog)
+    blog_content_type=ContentType.objects.get_for_model(blog)
+    comments=Comment.objects.filter(content_type=blog_content_type,object_id=blog.pk)
+
     context={}
     context['previous_blog'] = Blog.objects.filter(create_time__gt=blog.create_time).last()  # 当前博客创建时间，随后进行比较
     context['next_blog'] = Blog.objects.filter(create_time__lt=blog.create_time).first()
     context['blog']=blog
-    response=render_to_response('blog_deatil.html',context)
+    response=render(request,'blog_deatil.html',context)
     response.set_cookie(read_cookies_key, 'true')
     return response
 
@@ -67,14 +72,14 @@ def blog_type(request,blog_type_pk):
     context=blog_with_comment(request,blog_all_list)
     context['blog_type']=blog_type
 
-    return render_to_response('blog_type.html', context)
+    return render(request,'blog_type.html', context)
 
 def blog_date(request,year,month,day):
     blog_all_list=Blog.objects.filter(create_time__year=year,create_time__month=month,create_time__day=day)
     blog_dates_list='%s年%s月%s日' % (year, month, day)
     context=blog_with_comment(request,blog_all_list)
     context['blog_dates_list']=blog_dates_list
-    return render_to_response('blog_date.html', context)
+    return render(request,'blog_date.html', context)
 
 
 
@@ -121,4 +126,4 @@ def home(request):
     context['get_today_hot_date'] = get_today_hot_date()
     context['get_yesterday_hot_data']=get_yesterday_hot_data()
     context['get_7_days_hot_blogs']=get_7_days_hot_blogs()
-    return render_to_response('home_blog.html', context)
+    return render(request,'home_blog.html', context)

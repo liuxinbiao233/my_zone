@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block interestings_active %}active{% endblock %}
+
+{% load staticfiles %}
+{% block nav_heard %}
+    <link rel="stylesheet" href="{% static 'blog.css' %}">
+{% endblock %}
+
+{% block title %}
+    <div class="title">
+        <h3 style="color: #a7147afa" class="blog_header">这都能发生QAQ</h3>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        {% for blog in blogs %}
+                            <div class="blog_artcle">
+                                <a href="{% url 'things_detail' blog.pk %}">
+                                    <h3>{{  blog.things  }}</h3>
+                                </a>
+                                <p class="blog-info">
+                                    <span class="glyphicon glyphicon-console"></span> {{ blog.type }}
+                                    <br>
+                                    <span class="glyphicon glyphicon-time">{{ blog.create_time|date:"Y-m-d G:n:s" }}记录</span>
+                                    <br>
+                                    <p>内容：{{ blog.content|truncatechars:30}}</p>
+                                    <p>作者:刘新彪</p>
+                                    <p>创作时间：{{ blog.create_time }}</p>
+                                    <hr>
+                                </p>
+                            </div>
+                            {% empty %}
+                            <div class="blog">
+                                <h3>--可能是我我在迁移数据库是出错了，什么都没有显示</h3>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

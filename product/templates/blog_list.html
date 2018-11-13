@@ -3,6 +3,8 @@
 {% block article_active %}active{% endblock %}
 
 {% load staticfiles %}
+{% load comment_tags %}
+{% load likes_tags %}
 {% block nav_heard %}
     <link rel="stylesheet" href="{% static 'blog.css' %}">
 {% endblock %}
@@ -33,6 +35,8 @@
                                     <p>作者:{{ blog.author }}</p>
                                     <p>创作时间：{{ blog.create_time }}</p>
                                     <p>阅读：{{ blog.get_read_num }}</p>
+                                    <p>评论({% get_comment_count blog %})</p>
+                                    <p>点赞({% get_like_count blog %})</p>
                                     <hr>
 
                             </div>
